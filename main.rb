@@ -141,6 +141,7 @@ while response != 'q'
                 else
                     client.budget = (client.budget) - p_value.to_f
                     puts "You now have #{(client.budget)} pounds left."
+                    while true
                     puts "Which portfolio would you like to add #{stock_name} stocks to?"
                     x = 1
                     while x < (client.portfolios.size) + 1
@@ -149,10 +150,22 @@ while response != 'q'
                       x += 1
                     end
                     index = gets.chomp
-                    portfolio = client.portfolios[index.to_i-1]
-                    print "#{stock_name} has now been added to "
-                    print portfolio.to_s
-                    portfolio.stock << s
+                      if index.to_i > 0
+                        if index.to_i < client.portfolios.size + 1
+                        portfolio = client.portfolios[index.to_i-1]
+                        print "#{stock_name} has now been added to "
+                        print portfolio.to_s
+                        portfolio.stock << s
+                        break
+                        else
+                           puts "Please enter a number between 1 and #{client.portfolios.size}."
+                        gets
+                        end
+                      else
+                        puts "Please enter a number. Press enter to return to the menu."
+                        gets
+                      end
+                      end
                 end
               end
               break
@@ -199,9 +212,9 @@ while response != 'q'
                           puts "#{client.portfolios[x-1].to_s}"
                           x += 1
                         end
-                        # while true
+
                         index = gets.chomp
-                              # if index.to_i > 0
+                              if index.to_i > 0
                               portfolio = client.portfolios[index.to_i-1]
                                   if portfolio.stock.size > 0
                                   print "#{portfolio.to_s} stocks include: \n"
@@ -211,12 +224,11 @@ while response != 'q'
                                   puts "This portfolio does not have any stocks!"
                                   break
                                 end
-                              # # else
-                              #   puts "Please enter a number. Press enter to return to menu."
-                              #   gets
-                              #   break
-                              # end
-                        # end
+                              else
+                                puts "Please enter a number. Press enter to return to menu."
+                                gets
+                              end
+
                   end
           end
           break
