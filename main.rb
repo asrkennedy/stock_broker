@@ -136,20 +136,24 @@ while response != 'q'
                 puts s.to_s
                 p_value = (number_share.to_i*value.to_f)
                 puts
-                client.budget = (client.budget) - p_value.to_f
-                puts "You now have #{(client.budget)} pounds left."
-                puts "Which portfolio would you like to add #{stock_name} stocks to?"
-                x = 1
-                while x < (client.portfolios.size) + 1
-                  print "#{x})"
-                  puts "#{client.portfolios[x-1].to_s}"
-                  x += 1
+                if (client.budget) - p_value.to_f < 0
+                  puts "I'm sorry you don't have enough money to buy that much stock! Press enter to return to the menu."
+                else
+                    client.budget = (client.budget) - p_value.to_f
+                    puts "You now have #{(client.budget)} pounds left."
+                    puts "Which portfolio would you like to add #{stock_name} stocks to?"
+                    x = 1
+                    while x < (client.portfolios.size) + 1
+                      print "#{x})"
+                      puts "#{client.portfolios[x-1].to_s}"
+                      x += 1
+                    end
+                    index = gets.chomp
+                    portfolio = client.portfolios[index.to_i-1]
+                    print "#{stock_name} has now been added to "
+                    print portfolio.to_s
+                    portfolio.stock << s
                 end
-                index = gets.chomp
-                portfolio = client.portfolios[index.to_i-1]
-                print "#{stock_name} has now been added to "
-                print portfolio.to_s
-                portfolio.stock << s
               end
               break
           else
