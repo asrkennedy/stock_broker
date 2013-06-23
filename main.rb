@@ -129,6 +129,9 @@ while response != 'q'
                 stock_name = gets.chomp
                 puts
                 value = get_price stock_name
+                if value == 0
+                  puts "This is not a valid stock name. Please visit http://www.eoddata.com/stockList/NASDAQ.htm to look up the symbol you are looking for."
+                else
                 puts "This stock is selling at #{value.to_f} per share. How much would you like to buy?"
                 number_share = gets.chomp
                 puts
@@ -163,9 +166,10 @@ while response != 'q'
                         end
                       else
                         puts "Please enter a number. Press enter to return to the menu."
-                        gets
+                        puts
                       end
                       end
+                end
                 end
               end
               break
