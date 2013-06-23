@@ -275,9 +275,12 @@ while response != 'q'
                         worth_array = []
                         while x < (client.portfolios.size) + 1
                               client.portfolios[x-1].stock.each do |stock|
-                                  worth_array << ((stock.number_shares).to_i*(stock.share_price).to_f).to_f
+                                  value = ((stock.number_shares).to_i*(stock.share_price).to_f).to_f
+                                  worth_array << value
+                                  puts "The #{client.portfolios[x-1].name} portfolio is worth #{value}."
                               end
                               portfolio_worth = worth_array.inject {|sum,x| sum + x }
+
                               x+= 1
                         end
                         client_worth = []
@@ -288,7 +291,7 @@ while response != 'q'
                         if client_value == nil
                               puts "This client has no stocks."
                         else
-                              puts "#{client.name} is worth #{client_value/(client.portfolios.size)}."
+                              puts "#{client.name} is worth #{client_value/(client.portfolios.size)} and has a remaining budget of #{client.budget}."
                         end
                   end
             else
