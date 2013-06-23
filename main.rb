@@ -24,18 +24,25 @@ def menu
 end
 
 def new_client
-  b = Broker.new
   puts "Enter the new client's name:"
   name = gets.chomp
   puts "Enter the new client's age:"
   age = gets.chomp
   puts "Enter the new client's sex:"
   sex = gets.chomp.downcase
+  while true
   puts "Enter the new client's budget:"
   budget = gets.chomp
-  c = Client.new name, age, sex, budget.to_i
-  puts c.to_s
-  b.clients << c
+      if budget.to_i > 0
+      c = Client.new name, age, sex, budget.to_i
+      puts c.to_s
+      c
+      break
+    else
+      puts "Please enter a number."
+      gets
+    end
+  end
   c
 end
 
@@ -126,7 +133,7 @@ while response != 'q'
               else
                 puts
                 puts "What is the ticker symbol for the stock you would like to buy?"
-                stock_name = gets.chomp
+                stock_name = gets.chomp.upcase
                 puts
                 value = get_price stock_name
                 if value == 0
@@ -136,12 +143,12 @@ while response != 'q'
                 number_share = gets.chomp
                 puts
                 s = Stock.new stock_name, number_share, value
-                puts s.to_s
                 p_value = (number_share.to_i*value.to_f)
                 puts
                 if (client.budget) - p_value.to_f < 0
                   puts "I'm sorry you don't have enough money to buy that much stock! Press enter to return to the menu."
                 else
+                    puts s.to_s
                     client.budget = (client.budget) - p_value.to_f
                     puts "You now have #{(client.budget)} pounds left."
                     while true
@@ -258,52 +265,38 @@ while response != 'q'
           x += 1
         end
         index = gets.chomp
-          if index.to_i > 0
+        if index.to_i > 0
             client = b.clients[index.to_i-1]
-        # x = 1
-        # while x < (client.portfolios.size) + 1
-        #   print "#{x})"
-        #   puts "#{client.portfolios[x-1].to_s}"
-        #   x += 1
-        # end
-          if client.portfolios.size < 1
-            puts "This client has no stocks."
-          else
-            x =1
-            worth_array = []
-            while x < (client.portfolios.size) + 1
-             client.portfolios[x-1].stock.each do |stock|
-              worth_array << ((stock.number_shares).to_i*(stock.share_price).to_f).to_f
-                end
-            portfolio_worth = worth_array.inject {|sum,x| sum + x }
-            x+= 1
-            end
-            client_worth = []
-              client.portfolios.each do |portfolio|
-                client_worth << portfolio_worth
-              end
-            client_value = client_worth.inject{|sum,x| sum + x}
-            if client_value == nil
-              puts "This client has no stocks."
+            if index.to_i < b.clients.size + 1
+                  if client.portfolios.size < 1
+                        puts "This client has no stocks."
+                  else
+                        x =1
+                        worth_array = []
+                        while x < (client.portfolios.size) + 1
+                              client.portfolios[x-1].stock.each do |stock|
+                                  worth_array << ((stock.number_shares).to_i*(stock.share_price).to_f).to_f
+                              end
+                              portfolio_worth = worth_array.inject {|sum,x| sum + x }
+                              x+= 1
+                        end
+                        client_worth = []
+                        client.portfolios.each do |portfolio|
+                            client_worth << portfolio_worth
+                        end
+                        client_value = client_worth.inject{|sum,x| sum + x}
+                        if client_value == nil
+                              puts "This client has no stocks."
+                        else
+                              puts "#{client.name} is worth #{client_value/(client.portfolios.size)}."
+                        end
+                  end
             else
-            puts "#{client.name} is worth #{client_value/(client.portfolios.size)}."
-          end
-          end
-        else
-          puts "Please enter a number"
-          gets
-        end
-
-
-
-        # puts "Which portfolio would you like to view?"
-        # index = gets.chomp
-        # portfolio = client.portfolios[index.to_i-1]
-        # #binding.pry
-
-          # client.portfolios.stock.each do |stock|
-
-
+                  puts "Please enter a number between 1 and #{b.clients.size}. Press enter to continue."
+            end
+      else
+            puts "Please enter a number. Press enter to continue."
+      end
   else
     puts "Please enter numbers 1-6 or Q."
   end
